@@ -1,0 +1,14 @@
+os
+cv2
+threading
+yt_dlp
+queue
+time
+flask
+flask-socketio
+python-socketio
+eventlet
+tensorflow
+opencv-python
+numpy
+flask-cors

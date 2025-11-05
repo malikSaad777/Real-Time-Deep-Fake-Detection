@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center mb-4">
+  <h2>Deepfake Detection Dashboard</h2>
+  <p class="text-muted">Upload videos, analyze live streams, and monitor deepfake results.</p>
+</div>
+
+<div class="row g-4">
+  <!-- Upload Video Section -->
+  <div class="col-md-6">
+    <div class="card shadow-sm p-4">
+      <h5>📤 Upload Video for Detection</h5>
+      <form id="uploadForm" enctype="multipart/form-data">
+        <input class="form-control mb-3" type="file" name="file" accept="video/*" required />
+        <button type="submit" class="btn btn-primary w-100">Analyze</button>
+      </form>
+      <pre id="result" class="mt-3 bg-light p-2 rounded"></pre>
+    </div>
+  </div>
+
+  <!-- Live Webcam Detection 
+  <div class="col-md-6">
+    <div class="card shadow-sm p-4">
+      <h5>🎥 Live Webcam Detection</h5>
+      <a href="/detection/Live" target="_blank" class="btn btn-success w-100">Start Live Detection</a>
+    </div>
+  </div>
+</div>
+-->
+
+<!-- Stream from Webcam or URL -->
+<div class="card shadow-sm p-4 mt-4">
+  <h5>🌐 Analyze Online Stream</h5>
+  <form id="streamForm" class="row g-2 align-items-center">
+    <div class="col-md-3">
+      <select id="streamSource" class="form-select">
+        <option value="webcam" selected>🎥 Use Webcam</option>
+        <option value="url">🌐 Video URL</option>
+      </select>
+    </div>
+
+    <div class="col-md-5">
+      <input type="text" id="videoUrl" class="form-control"
+             placeholder="Paste YouTube link" style="display:none;">
+    </div>
+
+    <div class="col-md-2">
+      <button type="submit" id="startStream" class="btn btn-info text-white w-100">Start</button>
+    </div>
+
+    <div class="col-md-2">
+      <button type="button" id="stopStream" class="btn btn-danger w-100" disabled>Stop</button>
+    </div>
+  </form>
+
+  <div style="position:relative; display:inline-block;" class="mt-3 text-center">
+    <img id="video-feed" style="width: 640px; height: 480px; border: 2px solid #ccc; border-radius: 8px;">
+    <p id="streamStatus" class="mt-2 text-muted">🔴 Stream inactive</p>
+    <div id="overlay" style="
+    position: 600px;
+    top: 12px;
+    left: 12px;
+    background: rgba(0,0,0,0.6);
+    color: #00FF88;
+    font-family: monospace;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    pointer-events: none;
+  ">
+    FPS: -- | Confidence: -- | Label: --
+  </div>
+
+</div>
+
+<!-- JavaScript -->
+<script>
+const uploadForm = document.getElementById("uploadForm");
+const streamForm = document.getElementById("streamForm");
+const sourceSelect = document.getElementById("streamSource");
+const urlInput = document.getElementById("videoUrl");
+const videoFeed = document.getElementById("video-feed");
+const stopButton = document.getElementById("stopStream");
+const startButton = document.getElementById("startStream");
+const streamStatus = document.getElementById("streamStatus");
+
+let isStreaming = false;
+
+// Upload video analysis
+uploadForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(uploadForm);
+  const res = await fetch("/detection/analyze", { method: "POST", body: formData });
+  const data = await res.json();
+  document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+});
+
+// Toggle URL input
+sourceSelect.addEventListener("change", () => {
+  urlInput.style.display = sourceSelect.value === "url" ? "inline-block" : "none";
+});
+
+//--------
+const overlay = document.getElementById("overlay");
+let overlayInterval = null;
+
+async function fetchOverlayData() {
+  try {
+    const res = await fetch("/detection/overlay_data");
+    if (!res.ok) return;
+    const data = await res.json();
+    overlay.textContent = `FPS: ${data.fps.toFixed(1)} | Confidence: ${(data.confidence * 100).toFixed(1)}% | Label: ${data.label}`;
+  } catch (err) {
+    console.warn("Overlay fetch failed:", err);
+  }
+}
+
+// Start streaming
+streamForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (isStreaming) return alert("Stream already running.");
+
+  const source = sourceSelect.value;
+  const videoUrl = urlInput.value.trim();
+
+  try {
+    const res = await fetch("/detection/live/start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ source, url: videoUrl })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to start stream");
+
+    setTimeout(() => {
+      videoFeed.src = "/detection/live_feed?ts=" + Date.now();
+    }, 500)
+    overlayInterval = setInterval(fetchOverlayData, 1000); // update once per second
+
+    console.log("videoFeed element:", videoFeed);
+    videoFeed.src = "/detection/live_feed";
+
+    isStreaming = true;
+    stopButton.disabled = false;
+    startButton.disabled = true;
+    streamStatus.textContent = "🟢 Stream active";
+  } catch (err) {
+    alert("Error starting stream: " + err.message);
+    console.error(err);
+  }
+});
+
+// Stop streaming
+stopButton.onclick = async () => {
+  if (!isStreaming) return;
+
+  // Stop video display immediately
+    videoFeed.removeAttribute("src");
+    videoFeed.src = "";
+    clearInterval(overlayInterval);
+    overlay.textContent = "FPS: -- | Confidence: -- | Label: --";
+    videoFeed.style.display = "none";
+    isStreaming = false;
+    
+  try {
+    const res = await fetch("/detection/live/stop", { method: "POST" });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || "Failed to stop stream");
+
+    
+    isStreaming = false;
+    stopButton.disabled = true;
+    startButton.disabled = false;
+    streamStatus.textContent = "🔴 Stream stopped";
+
+    console.log("🛑 Stream stopped successfully");
+  } catch (err) {
+    alert("Error stopping stream: " + err.message);
+    console.error(err);
+  }
+};
+</script>
+
+
+{% endblock %}
