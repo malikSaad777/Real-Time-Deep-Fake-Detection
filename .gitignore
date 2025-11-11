@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# Virtual environments
+venv/
+.env/
+
+# Models and uploads
+models/*.h5
+uploads/
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
