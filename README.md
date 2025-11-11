@@ -85,11 +85,15 @@ pip install -r requirements.txt
 # 4. Run the app
 python run.py
 ```
-#login
+# login
 <img width="1911" height="950" alt="Screenshot 2025-11-11 140331" src="https://github.com/user-attachments/assets/54b73103-11a3-4669-b987-553b89e06fbb" />
 
 ---
-#interface
+# Registor
+<img width="1909" height="939" alt="image" src="https://github.com/user-attachments/assets/e4c10a37-8ffb-4615-8aac-7b656501b20d" />
+
+---
+# Interface
 <img width="1907" height="942" alt="Screenshot 2025-11-11 140444" src="https://github.com/user-attachments/assets/761465a0-b0d7-4be0-b170-0b2291cae5a5" />
 
 ---
@@ -101,7 +105,7 @@ python run.py
 <img width="779" height="581" alt="image" src="https://github.com/user-attachments/assets/2d1e17e0-2dfa-4196-beb9-a3c50afa7d07" />
 
 ---
-#live URL detection
+# live URL detection
 <img width="773" height="567" alt="image" src="https://github.com/user-attachments/assets/9f38e00d-9e8c-40f6-baf6-3e5a8e54d74c" />
 
 
