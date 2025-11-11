@@ -1,5 +1,29 @@
 # Real-Time-Deep-Fake-Detection
-Real Time Deep-Fake Detection
+# Deepfake Detection 🎥🧠
+
+This is the **Prototype Phase** of a Deepfake Detection Web Application that uses a CNN-LSTM model for detecting manipulated videos in real time.
+
+---
+
+## 🚀 Features
+- Upload video files and detect whether they are **real or fake**
+- Analyze live webcam or YouTube video streams
+- Real-time frame-by-frame predictions with confidence scores
+- User authentication (login/register)
+- Flask + Socket.IO backend with a Bootstrap frontend
+
+---
+
+## 🧩 Tech Stack
+- **Backend:** Flask, Flask-SocketIO, OpenCV, TensorFlow/Keras
+- **Frontend:** HTML, Bootstrap, JavaScript (Fetch API)
+- **Database:** SQLite
+- **Streaming:** MJPEG feed via OpenCV and Socket.IO
+
+---
+
+## 🏗️ Project Structure
+
 deepfake-detection/
 │
 ├── app/
@@ -29,3 +53,4 @@ deepfake-detection/
 ├── README.md                # documentation
 ├── .gitignore
 └── LICENSE (optional)
+
