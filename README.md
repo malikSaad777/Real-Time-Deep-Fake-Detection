@@ -62,7 +62,7 @@ deepfake-detection/
 ├── requirements.txt         # dependencies
 ├── README.md                # documentation
 ├── .gitignore
-└── LICENSE (optional)
+
 
 
 ---
