@@ -64,3 +64,21 @@ deepfake-detection/
 ├── .gitignore
 └── LICENSE (optional)
 
+
+---
+
+## ⚙️ Installation
+```bash
+# 1. Clone this repository
+git clone https://github.com//malikSaad777/Real-Time-Deep-Fake-Detection.git
+cd deepfake-detection
+
+# 2. Create a virtual environment
+python -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Run the app
+python run.py
