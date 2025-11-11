@@ -64,6 +64,8 @@ deepfake-detection/
 ├── README.md                # documentation
 ├── .gitignore
 
+#login
+<img width="1911" height="950" alt="Screenshot 2025-11-11 140331" src="https://github.com/user-attachments/assets/54b73103-11a3-4669-b987-553b89e06fbb" />
 
 
 ---
@@ -84,9 +86,4 @@ pip install -r requirements.txt
 # 4. Run the app
 python run.py
 
----
-## Login
-<img width="1911" height="950" alt="image" src="https://github.com/user-attachments/assets/1ba285d0-d4fc-43da-bfbe-402a37134b5a" />
-## interface
-<img width="1907" height="942" alt="image" src="https://github.com/user-attachments/assets/56d91f9a-cdae-46cc-9905-982a2633341f" />
 
