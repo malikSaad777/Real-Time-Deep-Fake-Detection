@@ -24,6 +24,16 @@ This is the **Prototype Phase** of a Deepfake Detection Web Application that use
 
 ## 🏗️ Project Structure
 
+app/
+├── detection/ # Real-time and batch detection logic
+├── templates/ # HTML templates
+├── routes.py # Flask routes
+├── auth.py # Authentication module
+├── utils.py # Frame extraction, model loading
+├── database.py # SQLite initialization
+run.py # Entry point
+models/ # Trained model file
+
 deepfake-detection/
 │
 ├── app/
